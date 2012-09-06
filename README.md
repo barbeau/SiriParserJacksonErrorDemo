@@ -10,3 +10,6 @@ Usage of this project from the command-line is:
 java JacksonSiriParserExample path-to-JSON-file
 
 where "path-to-JSON-file" is the full path, including the file name, to either of the example files included in this project.
+
+NOTE: This project has a dependency on the SIRI POJO classes, which can be found here:
+https://github.com/CUTR-at-USF/onebusaway-siri-api-v13-pojos
