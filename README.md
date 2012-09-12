@@ -1,4 +1,4 @@
-A simple Java desktop project showing and XML parsing error that happens with XML but not with JSON, using the same POJOs.
+A simple Java desktop project showing an XML parsing error that happens with XML but not with JSON, using the same POJOs.
 
 Two simplified files (one JSON and one XML) are included, based on the responses from the MTA BusTime API (http://bustime.mta.info/wiki/Developers/SIRIIntro):
 
