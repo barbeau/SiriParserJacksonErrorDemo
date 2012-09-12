@@ -23,20 +23,47 @@
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>2.0.5</version>
+            <version>2.1.0-SNAPSHOT</version>
         </dependency>
      
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.0.5</version>
+            <version>2.0.6</version>
         </dependency>
         
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-annotations</artifactId>
+            <version>2.1.0-SNAPSHOT</version>
+        </dependency>
+        <!-- Jackson, for XML parsing -->
+        <dependency>
+            <groupId>com.fasterxml</groupId>
+            <artifactId>aalto-xml</artifactId>
+            <version>0.9.8</version>
+        </dependency>
+        
+        <dependency>            
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-xml</artifactId>
             <version>2.0.5</version>
         </dependency>
+                
+        <!-- Apache Commons for FilenameUtils -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.1</version>
+        </dependency>   
   </dependencies>
+  
+  <!-- For Jackson SNAPSHOTs -->
+  <repositories>
+      <repository>
+          <id>fasterxml-snapshots</id>
+          <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
+      </repository>
+ </repositories>
 
 </project>
