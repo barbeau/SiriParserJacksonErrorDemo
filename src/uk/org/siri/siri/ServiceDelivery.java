@@ -6,7 +6,7 @@ import java.util.List;
 public class ServiceDelivery {
 	private Date responseTimestamp;
 	private List<VehicleMonitoringDelivery> vehicleMonitoringDelivery;
-		
+				
 	public Date getResponseTimestamp() {
 		return this.responseTimestamp;
 	}
@@ -26,4 +26,5 @@ public class ServiceDelivery {
 			List<VehicleMonitoringDelivery> vehicleMonitoringDelivery) {
 		this.vehicleMonitoringDelivery = vehicleMonitoringDelivery;
 	}	
+
 }
