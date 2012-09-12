@@ -25,6 +25,7 @@ import org.apache.commons.io.FilenameUtils;
 
 //SIRI POJO imports
 import uk.org.siri.siri.Siri;
+import uk.org.siri.siri.VehicleActivity;
 import uk.org.siri.siri.VehicleMonitoringDelivery;
 
 //Jackson XML imports
@@ -194,6 +195,19 @@ public class SiriParserJacksonErrorDemo {
 				System.out.println("ResponseTimestamp: "
 						+ vmd.getResponseTimestamp());
 				System.out.println("ValidUntil: " + vmd.getValidUntil());
+				
+				List<VehicleActivity> listVA = vmd.getVehicleActivity();
+				if(listVA != null){
+					
+					for(VehicleActivity va : listVA){
+						System.out.println("-------------------------------");
+						System.out.println("-      Vehicle Activity:      -");
+						System.out.println("-------------------------------");
+						System.out.println("RecordedAtTime: "
+								+ va.getRecordedAtTime());
+						System.out.println("-------------------------------");
+					}										
+				}
 			}
 		}
 
