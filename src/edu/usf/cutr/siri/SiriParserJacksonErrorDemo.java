@@ -18,15 +18,12 @@ package edu.usf.cutr.siri;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 //Apache filename util import
 import org.apache.commons.io.FilenameUtils;
 
 //SIRI POJO imports
 import uk.org.siri.siri.Siri;
-import uk.org.siri.siri.VehicleActivity;
-import uk.org.siri.siri.VehicleMonitoringDelivery;
 
 //Jackson XML imports
 import com.fasterxml.aalto.stax.InputFactoryImpl;
@@ -38,9 +35,8 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 //Jackson JSON imports
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
-//PascalCase import, to help Jackson deserialize PascalCase instead of the normal camelCase
-import edu.usf.cutr.siri.jackson.PascalCaseStrategy;
 
 /**
  * This class is an example of parsing a JSON or XML response from a SIRI feed
@@ -98,7 +94,7 @@ public class SiriParserJacksonErrorDemo {
 
 				// Tell Jackson to expect the JSON in PascalCase, instead of
 				// camelCase
-				mapper.setPropertyNamingStrategy(new PascalCaseStrategy());
+				mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.PascalCaseStrategy());
 
 				// Deserialize the JSON from the file into the Siri object
 				siri = mapper.readValue(file, Siri.class);
@@ -148,7 +144,7 @@ public class SiriParserJacksonErrorDemo {
 
 				// Tell Jackson to expect the XML in PascalCase, instead of
 				// camelCase
-				xmlMapper.setPropertyNamingStrategy(new PascalCaseStrategy());
+				xmlMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.PascalCaseStrategy());
 
 				// Parse the SIRI XML response
 				siri = xmlMapper.readValue(file, Siri.class);
@@ -157,62 +153,13 @@ public class SiriParserJacksonErrorDemo {
 			// If we successfully retrieved and parsed JSON or XML, print the
 			// contents
 			if (siri != null) {
-				printContents(siri);
+				SiriUtils.printContents(siri);
 			}
 
 		} catch (IOException e) {
 			System.err.println("Error parsing input file: " + e);
+			e.printStackTrace();
 		}
 
 	}
-
-	/**
-	 * Prints the contents of a Siri object
-	 * 
-	 * @param siri
-	 *            Siri object whose contents will be printed
-	 */
-	private static void printContents(Siri siri) {
-		System.out
-				.println("-----------------------------------------------------");
-		System.out
-				.println("-               Service Delivery:                   -");
-		System.out
-				.println("-----------------------------------------------------");
-		System.out.println("ResponseTimestamp: "
-				+ siri.getServiceDelivery().getResponseTimestamp());
-
-		System.out.println("------------------------------------------");
-		System.out.println("-      Vehicle Monitoring Delivery:      -");
-		System.out.println("------------------------------------------");
-
-		List<VehicleMonitoringDelivery> listVMD = siri.getServiceDelivery()
-				.getVehicleMonitoringDelivery();
-
-		if (listVMD != null) {
-			for (VehicleMonitoringDelivery vmd : listVMD) {
-
-				System.out.println("ResponseTimestamp: "
-						+ vmd.getResponseTimestamp());
-				System.out.println("ValidUntil: " + vmd.getValidUntil());
-				
-				List<VehicleActivity> listVA = vmd.getVehicleActivity();
-				if(listVA != null){
-					
-					for(VehicleActivity va : listVA){
-						System.out.println("-------------------------------");
-						System.out.println("-      Vehicle Activity:      -");
-						System.out.println("-------------------------------");
-						System.out.println("RecordedAtTime: "
-								+ va.getRecordedAtTime());
-						System.out.println("-------------------------------");
-					}										
-				}
-			}
-		}
-
-		System.out.println("------------------------------------------");
-
-	}
-
 }
