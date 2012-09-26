@@ -1,0 +1,31 @@
+<Siri xmlns:ns2="http://www.ifopt.org.uk/acsb" xmlns:ns4="http://datex2.eu/schema/1_0/1_0" xmlns:ns3="http://www.ifopt.org.uk/ifopt" xmlns="http://www.siri.org.uk/siri">
+	<ServiceDelivery>
+		<ResponseTimestamp>2012-09-19T16:19:05.168-04:00</ResponseTimestamp>
+		<SituationExchangeDelivery>
+			<Situations>
+				<PtSituationElement>
+					<SituationNumber>MTA NYCT_85a96897-207b-4824-ad36-11a0248a29bc</SituationNumber>
+					<PublicationWindow>
+						<StartTime>2012-09-18T12:44:00-04:00</StartTime>
+					</PublicationWindow>
+					<Severity>undefined</Severity>
+					<Summary xml:lang="EN">b/d 1:00pm until f/n. loc al and express buses run w/delays &amp; detours. POTUS visit in MANH. Allow additional travel time Details at www.mta.info</Summary>
+					<Description xml:lang="EN">b/d 1:00pm until f/n. loc al and express buses run w/delays &amp; detours. POTUS visit in MANH. Allow additional travel time Details at www.mta.info</Description>
+					<Affects>
+						<VehicleJourneys>
+							<AffectedVehicleJourney>
+								<LineRef>MTA NYCT_BXM1</LineRef>
+								<DirectionRef>0</DirectionRef>
+							</AffectedVehicleJourney>
+						</VehicleJourneys>
+					</Affects>
+					<Consequences>
+						<Consequence>
+							<Condition>altered</Condition>
+						</Consequence>
+					</Consequences>
+				</PtSituationElement>
+			</Situations>
+		</SituationExchangeDelivery>
+	</ServiceDelivery>
+</Siri>
