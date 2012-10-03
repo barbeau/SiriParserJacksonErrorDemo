@@ -37,7 +37,6 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
-
 /**
  * This class is an example of parsing a JSON or XML response from a SIRI feed
  * using Jackson
@@ -109,7 +108,7 @@ public class SiriParserJacksonErrorDemo {
 				JacksonXmlModule module = new JacksonXmlModule();
 
 				/**
-				 * Tell Jackson that Lists are using "unwrapped" style (i.e., 
+				 * Tell Jackson that Lists are using "unwrapped" style (i.e.,
 				 * there is no wrapper element for list). This fixes the error
 				 * "com.fasterxml.jackson.databind.JsonMappingException: Can not
 				 * >> instantiate value of type [simple type, class >>
@@ -124,25 +123,26 @@ public class SiriParserJacksonErrorDemo {
 				 * as of 9/12/2012
 				 **/
 				module.setDefaultUseWrapper(false);
-				
+
 				/**
 				 * Handles "xml:lang" attribute, which is used in SIRI
-				 * NaturalLanguage String, and looks like:
-				 * <Description xml:lang="EN">b/d 1:00pm until f/n. loc al and 
-				 * express buses run w/delays & detours. POTUS visit in MANH. 
-				 * Allow additional travel time Details at www.mta.info</Description>
+				 * NaturalLanguage String, and looks like: <Description
+				 * xml:lang="EN">b/d 1:00pm until f/n. loc al and express buses
+				 * run w/delays & detours. POTUS visit in MANH. Allow additional
+				 * travel time Details at www.mta.info</Description>
 				 * 
-				 * Passing "Value" (to match expected name in XML to map, 
-				 * considering naming strategy) will make things work.  This is 
-				 * since JAXB uses pseudo-property name of "value" for XML Text 
-				 * segments, whereas Jackson by default uses "" (to avoid name 
+				 * Passing "Value" (to match expected name in XML to map,
+				 * considering naming strategy) will make things work. This is
+				 * since JAXB uses pseudo-property name of "value" for XML Text
+				 * segments, whereas Jackson by default uses "" (to avoid name
 				 * collisions).
 				 * 
 				 * NOTE - This requires Jackson 2.1, which is still pre-release
 				 * as of 9/12/2012.
 				 * 
-				 * NOTE - This still requires a CustomPascalCaseStrategy to work.
-				 * Please see the CustomPascalCaseStrategy in this app that is used below.
+				 * NOTE - This still requires a CustomPascalCaseStrategy to
+				 * work. Please see the CustomPascalCaseStrategy in this app
+				 * that is used below.
 				 */
 				module.setXMLTextElementName("lang");
 
@@ -165,8 +165,10 @@ public class SiriParserJacksonErrorDemo {
 
 				// Tell Jackson to expect the XML in PascalCase, instead of
 				// camelCase
-				//xmlMapper.setPropertyNamingStrategy(new PropertyNamingStrategy.PascalCaseStrategy());
-				xmlMapper.setPropertyNamingStrategy(new CustomPascalCaseStrategy());
+				// xmlMapper.setPropertyNamingStrategy(new
+				// PropertyNamingStrategy.PascalCaseStrategy());
+				xmlMapper
+						.setPropertyNamingStrategy(new CustomPascalCaseStrategy());
 
 				// Parse the SIRI XML response
 				siri = xmlMapper.readValue(file, Siri.class);
