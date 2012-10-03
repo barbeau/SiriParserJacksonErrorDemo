@@ -269,8 +269,10 @@ public class SiriUtils {
 	    			System.out.println("PtSituationElement.Severity: " + ptse.getSeverity());
 	    			System.out.println("PtSituationElement.Summary.Lang: " + ptse.getSummary().getLang()); 
 	    			System.out.println("PtSituationElement.Summary.Value: " + ptse.getSummary().getValue());
+	    			System.out.println("PtSituationElement.Summary.toString: " + ptse.getSummary().toString());
 	    			System.out.println("PtSituationElement.Description.Lang: " + ptse.getDescription().getLang()); 
-	    			System.out.println("PtSituationElement.Description.Value: " + ptse.getDescription().getValue()); 
+	    			System.out.println("PtSituationElement.Description.Value: " + ptse.getDescription().getValue());
+	    			System.out.println("PtSituationElement.Description.toString: " + ptse.getDescription().toString());
 	    			       			
 	    			List<AffectedVehicleJourney> avjList = ptse.getAffects().getVehicleJourneys().getAffectedVehicleJourney();
 	    			
