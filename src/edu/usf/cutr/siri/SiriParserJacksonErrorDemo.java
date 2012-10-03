@@ -144,7 +144,7 @@ public class SiriParserJacksonErrorDemo {
 				 * work. Please see the CustomPascalCaseStrategy in this app
 				 * that is used below.
 				 */
-				module.setXMLTextElementName("lang");
+				module.setXMLTextElementName("Value");
 
 				XmlMapper xmlMapper = new XmlMapper(f, module);
 
