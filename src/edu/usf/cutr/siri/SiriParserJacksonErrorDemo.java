@@ -119,8 +119,7 @@ public class SiriParserJacksonErrorDemo {
 				 * uk.org.siri.siri.ServiceDel >>
 				 * ivery["VehicleMonitoringDelivery"])"
 				 * 
-				 * NOTE - This requires Jackson 2.1, which is still pre-release
-				 * as of 9/12/2012
+				 * NOTE - This requires Jackson v2.1
 				 **/
 				module.setDefaultUseWrapper(false);
 
@@ -137,8 +136,7 @@ public class SiriParserJacksonErrorDemo {
 				 * segments, whereas Jackson by default uses "" (to avoid name
 				 * collisions).
 				 * 
-				 * NOTE - This requires Jackson 2.1, which is still pre-release
-				 * as of 9/12/2012.
+				 * NOTE - This requires Jackson v2.1
 				 * 
 				 * NOTE - This still requires a CustomPascalCaseStrategy to
 				 * work. Please see the CustomPascalCaseStrategy in this app
