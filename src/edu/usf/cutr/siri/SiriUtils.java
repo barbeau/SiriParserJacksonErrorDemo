@@ -432,6 +432,7 @@ public class SiriUtils {
 			cacheWriteStartTime = 0;
 			cacheWriteEndTime = 0;
 			System.out.println("Couldn't write object to cache: " + e);
+			e.printStackTrace();
 		} finally {
 			try {
 				if (objectStream != null) {
