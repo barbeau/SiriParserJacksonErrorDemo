@@ -97,6 +97,7 @@ public class SiriParserJacksonErrorDemo {
 
 				// Deserialize the JSON from the file into the Siri object
 				siri = mapper.readValue(file, Siri.class);
+				SiriUtils.forceCacheWrite(mapper);
 			}
 
 			if (extension.equalsIgnoreCase("xml")) {
@@ -170,6 +171,7 @@ public class SiriParserJacksonErrorDemo {
 
 				// Parse the SIRI XML response
 				siri = xmlMapper.readValue(file, Siri.class);
+				SiriUtils.forceCacheWrite(xmlMapper);
 			}
 
 			// If we successfully retrieved and parsed JSON or XML, print the
@@ -177,7 +179,6 @@ public class SiriParserJacksonErrorDemo {
 			if (siri != null) {
 				SiriUtils.printContents(siri);
 			}
-
 		} catch (IOException e) {
 			System.err.println("Error parsing input file: " + e);
 			e.printStackTrace();

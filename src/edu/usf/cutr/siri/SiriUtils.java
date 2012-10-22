@@ -20,10 +20,19 @@ package edu.usf.cutr.siri;
  * Java imports
  */
 import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.text.DecimalFormat;
 import java.util.List;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.ObjectReader;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 /**
  * Siri POJO imports
@@ -46,6 +55,29 @@ import uk.org.siri.siri.VehicleMonitoringDelivery;
  * 
  */
 public class SiriUtils {
+	
+	// For caching objects (ObjectMapper, ObjectReader, and XmlMapper) if
+	// desired
+	
+	// Used to time cache read and write
+	private static long cacheReadStartTime = 0;
+	private static long cacheReadEndTime = 0;
+
+	private static long cacheWriteStartTime = 0;
+	private static long cacheWriteEndTime = 0;
+
+	private static boolean usingCache = false;
+
+	private static String CACHE_FILE_EXTENSION = ".cache";
+	
+	// Constants for defining which object type to read/write from/to cache
+	private static final String OBJECT_READER = "ObjectReader";
+	private static final String OBJECT_MAPPER = "ObjectMapper";
+	private static final String XML_MAPPER = "XmlMapper";
+
+	// Used to format decimals to 3 places
+	static DecimalFormat df = new DecimalFormat("#,###.###");
+		
 		
 	/**
 	 * Prints the contents of a Siri object
@@ -304,6 +336,116 @@ public class SiriUtils {
 	    	}
     	}
     	System.out.println("------------------------------------------");
+	}
+	
+	/**
+	 * Returns a benchmark of the amount of time the last cache read took for
+	 * the ObjectMapper or ObjectReader or XmlReader (in nanoseconds)
+	 * 
+	 * @return a benchmark of the amount of time the last cache read took for
+	 *         the ObjectMapper or ObjectReader or XmlReader (in nanoseconds)
+	 */
+	public static long getLastCacheReadTime() {
+		return cacheReadEndTime - cacheReadStartTime;
+	}
+
+	/**
+	 * Returns a benchmark of the amount of time the last cache write took for
+	 * the ObjectMapper or ObjectReader or XmlReader (in nanoseconds)
+	 * 
+	 * @return a benchmark of the amount of time the last cache write took for
+	 *         the ObjectMapper or ObjectReader or XmlReader (in nanoseconds)
+	 */
+	public static long getLastCacheWriteTime() {
+		return cacheWriteEndTime - cacheWriteStartTime;
+	}
+	
+	/**
+	 * Forces the write of a ObjectMapper, ObjectReader, or XmlMapper to the app
+	 * cache. The cache is used to reduce the cold-start delay for Jackson
+	 * parsing on future runs, after this VM instance is destroyed.
+	 * 
+	 * Applications may call this after a JSON or XML call to the server to
+	 * attempt to hide the cache write latency from the user, instead of having
+	 * the cache write occur as part of the first request to use the
+	 * ObjectMapper, ObjectReader, or XmlMapper.
+	 * 
+	 * This method is non-blocking.
+	 * 
+	 * @param instance
+	 *            of object to be written to the cache
+	 */
+	public static void forceCacheWrite(final Serializable object) {		
+		new Thread() {
+			public void run() {
+				writeToCache(object);
+			};
+		}.start();		
+	}
+	
+	/**
+	 * Write the given object to Android internal storage for this app
+	 * 
+	 * @param object
+	 *            serializable object to be written to cache (ObjectReader,
+	 *            ObjectMapper, or XmlReader)
+	 * @return true if object was successfully written to cache, false if it was
+	 *         not
+	 */
+	private synchronized static boolean writeToCache(Serializable object) {
+
+		FileOutputStream fileStream = null;
+		ObjectOutputStream objectStream = null;
+		String fileName = "";
+		boolean success = false;
+		
+		try {
+			if (object instanceof XmlMapper) {
+				fileName = XML_MAPPER + CACHE_FILE_EXTENSION;
+			}
+			if (object instanceof ObjectMapper) {
+				fileName = OBJECT_MAPPER + CACHE_FILE_EXTENSION;
+			}
+			if (object instanceof ObjectReader) {
+				fileName = OBJECT_READER + CACHE_FILE_EXTENSION;
+			}
+
+			cacheWriteStartTime = System.nanoTime();
+			fileStream = new FileOutputStream(fileName);
+			objectStream = new ObjectOutputStream(fileStream);
+			objectStream.writeObject(object);
+			objectStream.flush();
+			fileStream.getFD().sync();
+			cacheWriteEndTime = System.nanoTime();
+			success = true;
+
+			// Get size of serialized object
+			File file = new File(fileName);
+			
+			long fileSize = file.length();
+
+			System.out.println("Wrote " + fileName + " to cache (" + fileSize
+					+ " bytes) in " + df.format(getLastCacheWriteTime())
+					+ " ms.");
+		} catch (IOException e) {
+			// Reset timestamps to show there was an error
+			cacheWriteStartTime = 0;
+			cacheWriteEndTime = 0;
+			System.out.println("Couldn't write object to cache: " + e);
+		} finally {
+			try {
+				if (objectStream != null) {
+					objectStream.close();
+				}
+				if (fileStream != null) {
+					fileStream.close();
+				}
+			} catch (Exception e) {
+				System.out.println("Error closing file connections: " + e);
+			}
+		}
+
+		return success;
 	}
 
 }
