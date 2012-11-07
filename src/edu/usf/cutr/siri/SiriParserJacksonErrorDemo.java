@@ -75,25 +75,39 @@ public class SiriParserJacksonErrorDemo {
 
 			if (extension.equalsIgnoreCase("json")) {
 				System.out.println("Parsing JSON...");
-				ObjectMapper mapper = new ObjectMapper();
+				ObjectMapper mapper = null;
 
-				// Jackson 2.0 configuration settings
-				mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE, true);
-				mapper.configure(
-						DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,
-						true);
-				mapper.configure(
-						DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
-						true);
-				mapper.configure(
-						DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY,
-						true);
-				mapper.configure(
-						DeserializationFeature.READ_ENUMS_USING_TO_STRING, true);
+				try {
+					mapper = (ObjectMapper) SiriUtils
+							.readFromCache(SiriUtils.OBJECT_MAPPER);
+				} catch (Exception e) {
+					System.out.println("Error reading from cache: " + e);
+				}
+				
+				if(mapper == null){	
+					// instantiate ObjectMapper like normal if cache read failed
+					mapper = new ObjectMapper();
 
-				// Tell Jackson to expect the JSON in PascalCase, instead of
-				// camelCase
-				mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.PascalCaseStrategy());
+					// Jackson 2.0 configuration settings
+					mapper.configure(DeserializationFeature.UNWRAP_ROOT_VALUE,
+							true);
+					mapper.configure(
+							DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,
+							true);
+					mapper.configure(
+							DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
+							true);
+					mapper.configure(
+							DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY,
+							true);
+					mapper.configure(
+							DeserializationFeature.READ_ENUMS_USING_TO_STRING,
+							true);
+
+					// Tell Jackson to expect the JSON in PascalCase, instead of
+					// camelCase
+					mapper.setPropertyNamingStrategy(new PropertyNamingStrategy.PascalCaseStrategy());
+				}
 
 				// Deserialize the JSON from the file into the Siri object
 				siri = mapper.readValue(file, Siri.class);
@@ -145,30 +159,44 @@ public class SiriParserJacksonErrorDemo {
 				 */
 				module.setXMLTextElementName("Value");
 
-				XmlMapper xmlMapper = new XmlMapper(f, module);
+				XmlMapper xmlMapper = null;
 
-				xmlMapper.configure(
-						DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,
-						true);
-				xmlMapper
-						.configure(
-								DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
-								true);
-				xmlMapper.configure(
-						DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY,
-						true);
-				xmlMapper
-						.configure(
-								DeserializationFeature.READ_ENUMS_USING_TO_STRING,
-								true);
+				try {
+					xmlMapper = (XmlMapper) SiriUtils
+							.readFromCache(SiriUtils.XML_MAPPER);
+				} catch (Exception e) {
+					System.out.println("Error reading from cache: " + e);
+				}
 
-				// Tell Jackson to expect the XML in PascalCase, instead of
-				// camelCase
-				// xmlMapper.setPropertyNamingStrategy(new
-				// PropertyNamingStrategy.PascalCaseStrategy());
-				xmlMapper
-						.setPropertyNamingStrategy(new CustomPascalCaseStrategy());
+				if (xmlMapper == null) {
+					// instantiate XmlMapper like normal if cache read didn't work
+					xmlMapper = new XmlMapper(f, module);
 
+					xmlMapper
+							.configure(
+									DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY,
+									true);
+					xmlMapper
+							.configure(
+									DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT,
+									true);
+					xmlMapper
+							.configure(
+									DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY,
+									true);
+					xmlMapper.configure(
+							DeserializationFeature.READ_ENUMS_USING_TO_STRING,
+							true);
+
+					// Tell Jackson to expect the XML in PascalCase, instead of
+					// camelCase
+					// xmlMapper.setPropertyNamingStrategy(new
+					// PropertyNamingStrategy.PascalCaseStrategy());
+					xmlMapper
+							.setPropertyNamingStrategy(new CustomPascalCaseStrategy());
+
+				}
+				
 				// Parse the SIRI XML response
 				siri = xmlMapper.readValue(file, Siri.class);
 				SiriUtils.forceCacheWrite(xmlMapper);
